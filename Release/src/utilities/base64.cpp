@@ -88,6 +88,7 @@ std::vector<unsigned char> _from_base64(const utility::string_t& input)
     size_t padding = 0;
 
     // Validation
+    // 先按照一定的规则进行校验： 1. 输入参数长度必须是4的倍数 2. 每个byte必须是有效的base64数字  3. 最后的padding需要满足条件
     {
         auto size = input.size();
 
@@ -129,12 +130,12 @@ std::vector<unsigned char> _from_base64(const utility::string_t& input)
     auto outsz = (size / 4) * 3;
     outsz -= padding;
 
-    result.resize(outsz);
+    result.resize(outsz); // 将空间预分配出来
 
     size_t idx = 0;
     for (; size > 4; ++idx)
     {
-        unsigned char target[3];
+        unsigned char target[3];  // 在栈上分配相关的缓存，通过强制类型转换将参数转换侧 `triple_byte`，方便相关字段的提取
         memset(target, 0, sizeof(target));
         _triple_byte* record = reinterpret_cast<_triple_byte*>(target);
 
@@ -161,7 +162,7 @@ std::vector<unsigned char> _from_base64(const utility::string_t& input)
 
     // Handle the last four bytes separately, to avoid having the conditional statements
     // in all the iterations (a performance issue).
-
+    // 最后处理panding相关的字段
     {
         unsigned char target[3];
         memset(target, 0, sizeof(target));

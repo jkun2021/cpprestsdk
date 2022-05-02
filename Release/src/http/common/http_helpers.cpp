@@ -114,7 +114,8 @@ static const std::array<bool, 128> valid_chars = {{
 }};
 
 // Checks if the method contains any invalid characters
-bool validate_method(const utility::string_t& method)
+// 逐字符比较          !#$%&'*+-.0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz|~
+bool validate_method(const utility::string_t& method)  // 
 {
     for (const auto& ch : method)
     {

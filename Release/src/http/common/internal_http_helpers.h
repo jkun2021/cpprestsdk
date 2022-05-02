@@ -55,7 +55,7 @@ void trim_if(std::basic_string<Char>& str, Fn test)
             --last;
         } while (test(*last));
         ++last;
-        str.assign(first, last);
+        str.assign(first, last); // 使用assign复制中间的数据
         return;
     }
 
